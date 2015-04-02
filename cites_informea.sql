@@ -39,7 +39,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
 --
 -- National reports
 --
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports` AS
   SELECT
     `a`.`uuid` AS `id`,
     'cites' AS `treaty`,
@@ -54,7 +54,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
     WHERE `a`.`type` = 'biennial_report'
     GROUP BY `a`.`uuid`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_title` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_title` AS
   SELECT
     concat(`a`.`uuid`,'-',`b`.`language`) AS `id`,
     `a`.`uuid` AS `country_report_id`,
@@ -66,7 +66,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 -- Decisions
 --
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions` AS
   SELECT
     `a`.`uuid` AS `id`,
     concat('http://www.cites.org/node/',`a`.`nid`) AS `link`,
@@ -93,7 +93,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
   GROUP BY `a`.`uuid`;
 
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_content` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_content` AS
   SELECT
     concat(`a`.`uuid`,`b`.`language`) AS `id`,
     `a`.`uuid` AS `decision_id`,
@@ -106,19 +106,19 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
     WHERE `a`.`type` = 'document'
       AND lcase(`t1`.`name`) = 'decision';
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_documents` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_documents` AS
   SELECT  NULL AS `id`,NULL AS `decision_id`,NULL AS `diskPath`,NULL AS `url`,NULL AS `mimeType`,NULL AS `language`,NULL AS `filename` limit 0;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_keywords` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_keywords` AS
   SELECT NULL AS `id`,NULL AS `decision_id`,NULL AS `namespace`,NULL AS `term` limit 0;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_longtitle` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_longtitle` AS
   SELECT NULL AS `id`,NULL AS `decision_id`,NULL AS `language`,NULL AS `long_title` limit 0;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_summary` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_summary` AS
   SELECT NULL AS `id`,NULL AS `decision_id`,NULL AS `language`,NULL AS `summary` limit 0;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_title` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_title` AS
   SELECT
     concat(`a`.`uuid`,'-',`b`.`language`) AS `id`,
     `a`.`uuid` AS `decision_id`,
@@ -136,7 +136,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 -- Meetings
 --
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings` AS
   SELECT
     `a`.`uuid` AS `id`,'cites' AS `treaty`,
     concat('http://cites.org/eng/cop/index.php') AS `url`,
@@ -166,7 +166,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
       WHERE `a`.`type` = 'meeting'
       GROUP BY `a`.`uuid`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings_description` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings_description` AS
   SELECT
     concat(`a`.`uuid`,`b`.`language`) AS `id`,
     `a`.`uuid` AS `meeting_id`,
@@ -177,7 +177,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
     WHERE `b`.`body_value` IS NOT NULL
       AND trim(`b`.`body_value`) <> '';
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings_title` AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings_title` AS
   SELECT
     concat(`a`.`uuid`,`b`.`language`) AS `id`,
     `a`.`uuid` AS `meeting_id`,
