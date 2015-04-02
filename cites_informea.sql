@@ -18,14 +18,14 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     1 AS `primary`,
     date_format(from_unixtime(`a`.`created`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_field_contact_actual` `country` on `country`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_country_iso2` `iso2` on `country`.`field_contact_actual_target_id` = `iso2`.`entity_id`
-  LEFT JOIN `cites`.`field_data_field_contact_line_1` `line1` on (`line1`.`entity_id` = `a`.`nid` and `line1`.`language` = 'en')
-  LEFT JOIN `cites`.`field_data_field_contact_line_2` `line2` on (`line2`.`entity_id` = `a`.`nid` and `line2`.`language` = 'en')
-  LEFT JOIN `cites`.`field_data_field_contact_address` `addr` on (`addr`.`entity_id` = `a`.`nid` and `addr`.`language` = 'en')
-  LEFT JOIN `cites`.`field_data_field_contact_email` `email` on (`email`.`entity_id` = `a`.`nid` and `email`.`language` = 'en')
-  LEFT JOIN `cites`.`field_data_field_contact_telephone` `phone` on (`phone`.`entity_id` = `a`.`nid` and `phone`.`language` = 'en')
-  LEFT JOIN `cites`.`field_data_field_contact_fax` `fax` on (`fax`.`entity_id` = `a`.`nid` and `fax`.`language` = 'en')
+  INNER JOIN `cites`.`field_data_field_contact_actual` `country` ON `country`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`field_data_field_country_iso2` `iso2` ON `country`.`field_contact_actual_target_id` = `iso2`.`entity_id`
+  LEFT JOIN `cites`.`field_data_field_contact_line_1` `line1` ON (`line1`.`entity_id` = `a`.`nid` AND `line1`.`language` = 'en')
+  LEFT JOIN `cites`.`field_data_field_contact_line_2` `line2` ON (`line2`.`entity_id` = `a`.`nid` AND `line2`.`language` = 'en')
+  LEFT JOIN `cites`.`field_data_field_contact_address` `addr` ON (`addr`.`entity_id` = `a`.`nid` AND `addr`.`language` = 'en')
+  LEFT JOIN `cites`.`field_data_field_contact_email` `email` ON (`email`.`entity_id` = `a`.`nid` AND `email`.`language` = 'en')
+  LEFT JOIN `cites`.`field_data_field_contact_telephone` `phone` ON (`phone`.`entity_id` = `a`.`nid` AND `phone`.`language` = 'en')
+  LEFT JOIN `cites`.`field_data_field_contact_fax` `fax` ON (`fax`.`entity_id` = `a`.`nid` AND `fax`.`language` = 'en')
     WHERE `a`.`type` = 'cites_contact'
     GROUP BY `a`.`uuid`;
 
@@ -49,9 +49,9 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     concat('http://cites.org/node/',`a`.`nid`) AS `url`,
     date_format(from_unixtime(`a`.`created`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_field_report_date` `f` on `f`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_report_country` `g` on `g`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_country_iso3` `h` on `g`.`field_report_country_target_id` = `h`.`entity_id`
+  INNER JOIN `cites`.`field_data_field_report_date` `f` ON `f`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`field_data_field_report_country` `g` ON `g`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`field_data_field_country_iso3` `h` ON `g`.`field_report_country_target_id` = `h`.`entity_id`
     WHERE `a`.`type` = 'biennial_report'
     GROUP BY `a`.`uuid`;
 
@@ -62,7 +62,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`title_field_value` AS `title`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_title_field` `b` on (`a`.`nid` = `b`.`entity_id` and `a`.`type` = 'biennial_report');
+  INNER JOIN `cites`.`field_data_title_field` `b` ON (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'biennial_report');
 
 --
 -- Decisions
@@ -81,16 +81,16 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     NULL AS `meetingTitle`,
     NULL AS `meetingUrl`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_field_document_type` `b` on `b`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`taxonomy_term_data` `b1` on `b`.`field_document_type_tid` = `b1`.`tid`
-  LEFT JOIN  `cites`.`field_data_field_document_status` `c` on `c`.`entity_id` = `a`.`nid`
-  LEFT JOIN  `cites`.`taxonomy_term_data` `c1` on `c`.`field_document_status_tid` = `c1`.`tid`
-  LEFT JOIN  `cites`.`field_data_field_document_no` `d` on `d`.`entity_id` = `a`.`nid`
-  LEFT JOIN  `cites`.`field_data_field_document_cop_meeting` `g` on `g`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`node` `g1` on `g`.`field_document_cop_meeting_target_id` = `g1`.`nid`
+  INNER JOIN `cites`.`field_data_field_document_type` `b` ON `b`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`taxonomy_term_data` `b1` ON `b`.`field_document_type_tid` = `b1`.`tid`
+  LEFT JOIN  `cites`.`field_data_field_document_status` `c` ON `c`.`entity_id` = `a`.`nid`
+  LEFT JOIN  `cites`.`taxonomy_term_data` `c1` ON `c`.`field_document_status_tid` = `c1`.`tid`
+  LEFT JOIN  `cites`.`field_data_field_document_no` `d` ON `d`.`entity_id` = `a`.`nid`
+  LEFT JOIN  `cites`.`field_data_field_document_cop_meeting` `g` ON `g`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`node` `g1` ON `g`.`field_document_cop_meeting_target_id` = `g1`.`nid`
     WHERE `a`.`type` = 'document'
-      AND lcase(`b1`.`name`) in ('decision', 'resolution')
-      AND (isnull(`c1`.`name`) or (`c1`.`name` <> 'Invalid'))
+      AND lcase(`b1`.`name`) IN ('decision', 'resolution')
+      AND (isnull(`c1`.`name`) OR (`c1`.`name` <> 'Invalid'))
   GROUP BY `a`.`uuid`;
 
 
@@ -101,9 +101,9 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`body_value` AS `content`
   FROM `cites`.`node` `a`
-  LEFT JOIN `cites`.`field_data_body` `b` on `b`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_document_type` `t` on `t`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`taxonomy_term_data` `t1` on `t`.`field_document_type_tid` = `t1`.`tid`
+  LEFT JOIN `cites`.`field_data_body` `b` ON `b`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`field_data_field_document_type` `t` ON `t`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`taxonomy_term_data` `t1` ON `t`.`field_document_type_tid` = `t1`.`tid`
     WHERE `a`.`type` = 'document'
       AND lcase(`t1`.`name`) = 'decision';
 
@@ -126,11 +126,11 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`title_field_value` AS `title`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_title_field` `b` on `b`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_document_type` `t` on `t`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`taxonomy_term_data` `t1` on `t`.`field_document_type_tid` = `t1`.`tid`
+  INNER JOIN `cites`.`field_data_title_field` `b` ON `b`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`field_data_field_document_type` `t` ON `t`.`entity_id` = `a`.`nid`
+  INNER JOIN `cites`.`taxonomy_term_data` `t1` ON `t`.`field_document_type_tid` = `t1`.`tid`
     WHERE `a`.`type` = 'document'
-      AND lcase(`t1`.`name`) in ('decision','resolution')
+      AND lcase(`t1`.`name`) IN ('decision','resolution')
       AND `b`.`language` = 'en'
     ORDER BY `b`.`language`;
 
@@ -157,13 +157,13 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     NULL AS `longitude`,
     date_format(from_unixtime(`a`.`changed`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
-    INNER JOIN `cites`.`field_data_field_meeting_date` `mdates` on `a`.`nid` = `mdates`.`entity_id`
-    INNER JOIN `cites`.`field_data_field_meeting_type` `t` on `a`.`nid` = `t`.`entity_id`
-    INNER JOIN `cites`.`taxonomy_term_data` `tt` on `t`.`field_meeting_type_tid` = `tt`.`tid`
-    LEFT JOIN  `cites`.`field_data_field_meeting_location` `loc` on `a`.`nid` = `loc`.`entity_id`
-    LEFT JOIN  `cites`.`field_data_field_meeting_city` `city` on `a`.`nid` = `city`.`entity_id`
-    LEFT JOIN  `cites`.`field_data_field_meeting_country` `cnt` on `a`.`nid` = `cnt`.`entity_id`
-    LEFT JOIN  `cites`.`field_data_field_country_iso2` `iso2` on `cnt`.`field_meeting_country_target_id` = `iso2`.`entity_id`
+    INNER JOIN `cites`.`field_data_field_meeting_date` `mdates` ON `a`.`nid` = `mdates`.`entity_id`
+    INNER JOIN `cites`.`field_data_field_meeting_type` `t` ON `a`.`nid` = `t`.`entity_id`
+    INNER JOIN `cites`.`taxonomy_term_data` `tt` ON `t`.`field_meeting_type_tid` = `tt`.`tid`
+    LEFT JOIN  `cites`.`field_data_field_meeting_location` `loc` ON `a`.`nid` = `loc`.`entity_id`
+    LEFT JOIN  `cites`.`field_data_field_meeting_city` `city` ON `a`.`nid` = `city`.`entity_id`
+    LEFT JOIN  `cites`.`field_data_field_meeting_country` `cnt` ON `a`.`nid` = `cnt`.`entity_id`
+    LEFT JOIN  `cites`.`field_data_field_country_iso2` `iso2` ON `cnt`.`field_meeting_country_target_id` = `iso2`.`entity_id`
       WHERE `a`.`type` = 'meeting'
       GROUP BY `a`.`uuid`;
 
@@ -174,7 +174,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`body_value` AS `description`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_body` `b` on (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'meeting')
+  INNER JOIN `cites`.`field_data_body` `b` ON (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'meeting')
     WHERE `b`.`body_value` IS NOT NULL
       AND trim(`b`.`body_value`) <> '';
 
@@ -185,4 +185,4 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`title_field_value` AS `title`
   FROM `cites`.`node` `a`
-    INNER JOIN `cites`.`field_data_title_field` `b` on (`a`.`nid` = `b`.`entity_id` and `a`.`type` = 'meeting');
+    INNER JOIN `cites`.`field_data_title_field` `b` ON (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'meeting');
