@@ -36,6 +36,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     'cites' AS `treaty`
   FROM `cites`.`node` `a`
     WHERE `a`.`type` = 'cites_contact';
+
 --
 -- National reports
 --
@@ -88,7 +89,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
   LEFT JOIN  `cites`.`field_data_field_document_cop_meeting` `g` on `g`.`entity_id` = `a`.`nid`
   INNER JOIN `cites`.`node` `g1` on `g`.`field_document_cop_meeting_target_id` = `g1`.`nid`
     WHERE `a`.`type` = 'document'
-      AND lcase(`b1`.`name` in ('decision', 'resolution')
+      AND lcase(`b1`.`name`) in ('decision', 'resolution')
       AND (isnull(`c1`.`name`) or (`c1`.`name` <> 'Invalid'))
   GROUP BY `a`.`uuid`;
 
@@ -130,7 +131,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
   INNER JOIN `cites`.`taxonomy_term_data` `t1` on `t`.`field_document_type_tid` = `t1`.`tid`
     WHERE `a`.`type` = 'document'
       AND lcase(`t1`.`name`) in ('decision','resolution')
-      AND `b`.`language` = 'en')
+      AND `b`.`language` = 'en'
     ORDER BY `b`.`language`;
 
 --
@@ -173,7 +174,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`body_value` AS `description`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_body` `b` on (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'meeting'
+  INNER JOIN `cites`.`field_data_body` `b` on (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'meeting')
     WHERE `b`.`body_value` IS NOT NULL
       AND trim(`b`.`body_value`) <> '';
 
