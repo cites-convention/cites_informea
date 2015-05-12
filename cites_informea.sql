@@ -46,12 +46,14 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     'cites' AS `treaty`,
     ucase(`h`.`field_country_iso3_value`) AS `country`,
     `f`.`field_report_date_value` AS `submission`,
-    concat('http://cites.org/node/',`a`.`nid`) AS `url`,
+    concat('http://cites.org/sites/default/files/', REPLACE(`j`.`uri`, 'public://', '')) AS `url`,
     date_format(from_unixtime(`a`.`created`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
   INNER JOIN `cites`.`field_data_field_report_date` `f` ON `f`.`entity_id` = `a`.`nid`
   INNER JOIN `cites`.`field_data_field_report_country` `g` ON `g`.`entity_id` = `a`.`nid`
   INNER JOIN `cites`.`field_data_field_country_iso3` `h` ON `g`.`field_report_country_target_id` = `h`.`entity_id`
+  LEFT JOIN  `cites`.`field_data_field_report_attachment` `i` ON (`a`.nid = `i`.`entity_id` and `i`.`language` = 'en')
+  LEFT JOIN `cites`.`file_managed` `j` ON `i`.`field_report_attachment_fid` = `j`.fid
     WHERE `a`.`type` = 'biennial_report'
     GROUP BY `a`.`uuid`;
 
