@@ -47,17 +47,14 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     'cites' AS `treaty`,
     ucase(`h`.`field_country_iso3_value`) AS `country`,
     `f`.`field_report_date_value` AS `submission`,
-    concat('http://cites.org/sites/default/files/', REPLACE(`j`.`uri`, 'public://', '')) AS `url`,
+    concat('http://cites.org/node/', `a`.`nid`) AS `url`,
     date_format(from_unixtime(`a`.`created`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
     INNER JOIN `cites`.`field_data_field_report_date` `f` ON `f`.`entity_id` = `a`.`nid`
     INNER JOIN `cites`.`field_data_field_report_country` `g` ON `g`.`entity_id` = `a`.`nid`
     INNER JOIN `cites`.`field_data_field_country_iso3` `h` ON `g`.`field_report_country_target_id` = `h`.`entity_id`
-  LEFT JOIN  `cites`.`field_data_field_report_attachment` `i` ON (`a`.nid = `i`.`entity_id` and `i`.`language` = 'en')
-  LEFT JOIN `cites`.`file_managed` `j` ON `i`.`field_report_attachment_fid` = `j`.`fid`
     WHERE `a`.`type` = 'biennial_report'
-    AND `j`.`uri` IS NOT NULL
-    GROUP BY `a`.`uuid`;
+  GROUP BY `a`.`uuid`;
 
 CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_title` AS
   SELECT
@@ -67,7 +64,26 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`title_field_value` AS `title`
   FROM `cites`.`node` `a`
     INNER JOIN `cites`.`field_data_title_field` `b` ON (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'biennial_report')
-  WHERE `b`.`language` = 'en';
+  ORDER BY `b`.`language`;
+
+-- informea_country_reports_documents
+CREATE OR REPLACE DEFINER =`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_documents` AS
+  SELECT
+    CONCAT(ra.language, '-', n.nid) AS id,
+    n.uuid AS country_report_id,
+    CONCAT('sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS diskPath,
+    CONCAT('http://www.cites.org/sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS url,
+    f2.filemime AS mimeType,
+    ra.language AS `language`,
+    f2.filename AS filename
+  FROM `cites`.node n
+    INNER JOIN `cites`.field_data_field_report_attachment ra ON n.nid = ra.entity_id
+    INNER JOIN `cites`.file_managed f2 ON f2.fid = ra.field_report_attachment_fid
+  WHERE
+    n.status = 1
+    AND n.type = 'biennial_report'
+  ORDER BY ra.language;
+
 
 --
 -- Decisions
@@ -136,7 +152,6 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
   INNER JOIN `cites`.`taxonomy_term_data` `t1` ON `t`.`field_document_type_tid` = `t1`.`tid`
     WHERE `a`.`type` = 'document'
       AND lcase(`t1`.`name`) IN ('decision','resolution')
-      AND `b`.`language` = 'en'
     ORDER BY `b`.`language`;
 
 --
