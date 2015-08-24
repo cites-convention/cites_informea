@@ -69,7 +69,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
 -- informea_country_reports_documents
 CREATE OR REPLACE DEFINER =`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_documents` AS
   SELECT
-    CONCAT(ra.language, '-', n.nid) AS id,
+    CAST(CONCAT(ra.language, '-', n.nid) AS CHAR) AS id,
     n.uuid AS country_report_id,
     CONCAT('sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS diskPath,
     CONCAT('http://www.cites.org/sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS url,
@@ -91,7 +91,7 @@ CREATE OR REPLACE DEFINER =`root`@`localhost` SQL SECURITY DEFINER VIEW `informe
 CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions` AS
   SELECT
     `a`.`uuid` AS `id`,
-    concat('http://www.cites.org/node/',`a`.`nid`) AS `link`,
+    CAST(concat('http://www.cites.org/node/',`a`.`nid`) AS CHAR) AS `link`,
     lcase(`b1`.`name`) AS `type`,
     'active' AS `status`,`d`.
     `field_document_no_value` AS `number`,
