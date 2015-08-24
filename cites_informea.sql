@@ -11,6 +11,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     NULL AS `position`,
     `line2`.`field_contact_line_2_value` AS `institution`,
     NULL AS `department`,
+    NULL AS `type`,
     `addr`.`field_contact_address_value` AS `address`,
     `email`.`field_contact_email_value` AS `email`,
     `phone`.`field_contact_telephone_value` AS `phoneNumber`,
