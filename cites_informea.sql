@@ -49,12 +49,13 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     concat('http://cites.org/sites/default/files/', REPLACE(`j`.`uri`, 'public://', '')) AS `url`,
     date_format(from_unixtime(`a`.`created`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_field_report_date` `f` ON `f`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_report_country` `g` ON `g`.`entity_id` = `a`.`nid`
-  INNER JOIN `cites`.`field_data_field_country_iso3` `h` ON `g`.`field_report_country_target_id` = `h`.`entity_id`
+    INNER JOIN `cites`.`field_data_field_report_date` `f` ON `f`.`entity_id` = `a`.`nid`
+    INNER JOIN `cites`.`field_data_field_report_country` `g` ON `g`.`entity_id` = `a`.`nid`
+    INNER JOIN `cites`.`field_data_field_country_iso3` `h` ON `g`.`field_report_country_target_id` = `h`.`entity_id`
   LEFT JOIN  `cites`.`field_data_field_report_attachment` `i` ON (`a`.nid = `i`.`entity_id` and `i`.`language` = 'en')
-  LEFT JOIN `cites`.`file_managed` `j` ON `i`.`field_report_attachment_fid` = `j`.fid
+  LEFT JOIN `cites`.`file_managed` `j` ON `i`.`field_report_attachment_fid` = `j`.`fid`
     WHERE `a`.`type` = 'biennial_report'
+    AND `j`.`uri` IS NOT NULL
     GROUP BY `a`.`uuid`;
 
 CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_title` AS
@@ -64,7 +65,8 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     `b`.`language` AS `language`,
     `b`.`title_field_value` AS `title`
   FROM `cites`.`node` `a`
-  INNER JOIN `cites`.`field_data_title_field` `b` ON (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'biennial_report');
+    INNER JOIN `cites`.`field_data_title_field` `b` ON (`a`.`nid` = `b`.`entity_id` AND `a`.`type` = 'biennial_report')
+  WHERE `b`.`language` = 'en';
 
 --
 -- Decisions
