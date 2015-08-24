@@ -47,7 +47,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
     'cites' AS `treaty`,
     ucase(`h`.`field_country_iso3_value`) AS `country`,
     `f`.`field_report_date_value` AS `submission`,
-    concat('http://cites.org/node/', `a`.`nid`) AS `url`,
+    CAST(concat('http://cites.org/node/', `a`.`nid`) AS CHAR) AS `url`,
     date_format(from_unixtime(`a`.`created`),'%Y-%m-%d %H:%i:%s') AS `updated`
   FROM `cites`.`node` `a`
     INNER JOIN `cites`.`field_data_field_report_date` `f` ON `f`.`entity_id` = `a`.`nid`
