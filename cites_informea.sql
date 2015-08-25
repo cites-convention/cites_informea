@@ -130,7 +130,7 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
 
 CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_documents` AS
   SELECT
-    CONCAT(a.uuid, '-', f2.fid, '-', c.`language`) AS id,
+    CAST(CONCAT(a.uuid, '-', f2.fid, '-', c.`language`) AS CHAR) AS id,
     a.uuid  AS decision_id,
     CONCAT('sites/default/files/', REPLACE(f2.uri, 'public://', ''))      AS diskPath,
     CONCAT('http://www.cites.org/sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS url,
