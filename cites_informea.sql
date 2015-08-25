@@ -130,14 +130,20 @@ CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DE
 
 CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_documents` AS
   SELECT
-    NULL AS id,
-    NULL AS decision_id,
-    NULL AS diskPath,
-    NULL AS url,
-    NULL AS mimeType,
-    NULL AS language,
-    NULL AS filename
-  LIMIT 0;
+    CONCAT(a.uuid, '-', f2.fid, '-', c.`language`) AS id,
+    a.uuid  AS decision_id,
+    CONCAT('sites/default/files/', REPLACE(f2.uri, 'public://', ''))      AS diskPath,
+    CONCAT('http://www.cites.org/sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS url,
+    f2.filemime AS mimeType,
+    c.`language` AS LANGUAGE,
+    f2.filename  AS filename
+  FROM `cites`.node a
+    INNER JOIN `cites`.field_data_field_document_type b ON a.nid = b.entity_id
+    INNER JOIN `cites`.field_data_field_document_files c ON a.nid = c.entity_id
+    INNER JOIN `cites`.file_managed f2 ON f2.fid = c.field_document_files_fid
+  WHERE
+    a.`status` = 1
+    AND a.`type` = 'document';
 
 CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_keywords` AS
   SELECT
